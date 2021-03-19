@@ -1,6 +1,6 @@
 <template>
 
-  <div v-if="c_fruit.name" class="flex m-2 ml-1">
+  <div v-if="c_fruit.name" class="flex mx-4 ml-1">
 
     <img :src="c_fruit.image" class="w-8 h-8 rounded-full border-gray-200 border-2 border-solid m-2"/>
 

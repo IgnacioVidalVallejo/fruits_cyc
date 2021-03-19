@@ -10,15 +10,24 @@
 
     <div class="w-2/3 m-auto flex justify-between">
 
-      <ul class="w-1/4 h-16 mt-2 p-2 text-left list-none font-sans text-xs overflow-y-scroll overscroll-contain bg-gray-100 rounded-2xl mx-auto">
+      <div class="w-1/4 h-20 mt-4 flex flex-col">
 
-        <li v-for="(fruit,index) in fruits" :key="index" @click.prevent="activefruit = index" :class="[ activefruit === index ? 'active' : '' ]">
+        <div class="w-4 flex justify-between p-auto m-auto"><span class="w-4 border border-white transform -rotate-12"></span><span class="w-4 border border-white transform rotate-12"></span></div>
 
-          <mini-fruit-component :fruit="fruit"></mini-fruit-component>
+        <ul class=" h-12 p-2 text-left list-none font-sans text-xs overflow-y-scroll overscroll-contain bg-gray-100 rounded-2xl mx-auto">
 
-        </li>
-  
-      </ul>
+          <li v-for="(fruit,index) in fruits" :key="index" @click.prevent="activefruit = index" :class="[ activefruit === index ? 'active' : '' ]">
+
+            <mini-fruit-component :fruit="fruit"></mini-fruit-component>
+
+          </li>
+    
+        </ul>
+
+        <div class="w-4 flex justify-between p-auto m-auto"><span class="w-4 border border-white transform rotate-12"></span><span class="w-4 border border-white transform -rotate-12"></span></div>
+
+      </div>
+      
 
       <div class="w-3/5 mx-auto text-xs">
 
@@ -165,7 +174,7 @@ export default {
   margin-top: 60px;
 }
 ul{
-  scroll-snap-type: y proximity;
+  scroll-snap-type: y mandatory;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none; 
 }
