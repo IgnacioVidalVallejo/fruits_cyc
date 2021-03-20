@@ -14,12 +14,18 @@
 
         <div class="w-4 flex justify-between p-auto m-auto"><span class="w-4 border border-white transform -rotate-12"></span><span class="w-4 border border-white transform rotate-12"></span></div>
 
-        <ul class=" h-12 p-2 text-left list-none font-sans text-xs overflow-y-scroll overscroll-contain bg-gray-100 rounded-2xl mx-auto">
+        <ul class="h-12 p-2 text-left list-none font-sans text-xs overflow-y-scroll overscroll-contain bg-gray-100 rounded-2xl mx-auto">
 
-          <li v-for="(fruit,index) in fruits" :key="index" @click.prevent="activefruit = index" :class="[ activefruit === index ? 'active' : '' ]">
+          <li v-for="(fruit,index) in fruits" :key="index" @click.prevent="activefruit = index; addFruit = false" :class="[ activefruit === index ? 'active' : '' ]">
 
             <mini-fruit-component :fruit="fruit"></mini-fruit-component>
 
+          </li>
+
+          <li class="text-center">
+
+            <button class="w-full rounded-full h-12 text-center bg-black text-white" @click="enableAddFruit">Add fruit</button>
+            
           </li>
     
         </ul>
@@ -31,7 +37,7 @@
 
       <div class="w-3/5 mx-auto text-xs">
 
-        <fruit-description-component v-if="fruits[activefruit]" :fruit="fruits[activefruit]"></fruit-description-component>
+        <fruit-description-component v-if="fruits[activefruit]" :fruit="fruits[activefruit]" :addFruit="addFruit"></fruit-description-component>
 
       </div>
 
@@ -60,12 +66,20 @@ export default {
 
       receivedFruits: [],
       fruits:[],
-      activefruit: null
+      activefruit: null,
+      addFruit: false
 
     }
   },
 
   methods:{
+
+    enableAddFruit(){
+
+      if(this.addFruit == false)
+        this.addFruit = true;
+
+    },
 
     fetchFruits(){
 

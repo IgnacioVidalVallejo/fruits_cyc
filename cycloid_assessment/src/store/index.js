@@ -46,5 +46,6 @@ export default new Vuex.Store({
         getFruits: state => {
             return state.fruits;
         }
+
     }
 })

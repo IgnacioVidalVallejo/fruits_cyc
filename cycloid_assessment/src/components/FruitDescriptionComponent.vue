@@ -1,8 +1,30 @@
 <template>
 
-  <div class="m-4 p-8 bg-white rounded-2xl text-center">
+  <div class="m-4 p-8 bg-white rounded-2xl text-center ">
 
-    <span class="m-4">{{ c_fruit.description }}</span>
+    <div v-if="!c_addFruit" class="flex flex-col">
+
+      <span class="m-4">{{ c_fruit.description }}</span>
+
+      <button class="bg-black text-white rounded-full">Remove</button>
+
+    </div>
+    
+    <div v-if="c_addFruit" class="flex flex-col">
+
+      <input type="text" placeholder="input"/>
+
+      <input type="text" placeholder="input"/>
+
+      <input type="text" placeholder="input"/>
+
+      <input type="text" placeholder="input"/>
+
+      <input type="text" placeholder="input"/>
+
+      <button class="bg-black text-white rounded-full">Add</button>
+
+    </div>
 
   </div>
 
@@ -16,11 +38,13 @@ export default {
     
   },
   props:{
-    fruit: {type : Object , required: true}
+    fruit: {type : Object , required: true},
+    addFruit: {type: Boolean, required: true}
   },
   data(){
     return{
-      c_fruit: null
+      c_fruit: null,
+      c_addFruit: false
     }
   },
   methods:{
@@ -31,10 +55,18 @@ export default {
 
       this.c_fruit = value;
 
+    },
+    addFruit: function(value){
+
+      this.c_addFruit = value;
+
     }
   },
   created(){
+
     this.c_fruit = this.fruit;
+    this.c_addFruit = this.addFruit;
+
   },
   mounted(){
 
