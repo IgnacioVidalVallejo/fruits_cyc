@@ -2,19 +2,19 @@
 
   <div class="w-full bg-gray-100 h-screen pt-16 mx-auto">
 
-    <header class="fixed top-4 h-14 w-full text-center text-2xl leading-loose bg-gray-100">
+    <header class="fixed top-0 w-full text-center text-2xl bg-gray-100">
 
-      <h1 class="w-1/4 p-0 bg-white rounded-2xl mx-auto">Fruit List</h1>
+      <h1 class="w-1/4 h-16 p-0 bg-white rounded-2xl mx-auto text-4xl">Fruit List</h1>
 
     </header>
 
-    <div class="w-2/3 m-auto flex justify-between">
+    <div class="w-2/3 m-auto flex flex-col lg:flex-row justify-between bg-gray-200 rounded-2xl">
 
       <div class="w-1/4 h-20 mt-4 flex flex-col">
 
         <div class="w-4 flex justify-between p-auto m-auto"><span class="w-4 border border-white transform -rotate-12"></span><span class="w-4 border border-white transform rotate-12"></span></div>
 
-        <ul class="h-12 p-2 text-left list-none font-sans text-xs overflow-y-scroll overscroll-contain bg-gray-100 rounded-2xl mx-auto">
+        <ul class="h-12 text-left list-none font-sans text-lg overflow-y-scroll overscroll-contain bg-gray-100 rounded-2xl mx-auto">
 
           <li v-for="(fruit,index) in fruits" :key="index" @click.prevent="activefruit = index; addFruit = false" :class="[ activefruit === index ? 'active' : '' ]">
 
@@ -35,7 +35,7 @@
       </div>
       
 
-      <div class="w-3/5 mx-auto text-xs">
+      <div class="w-3/5 mx-auto text-lg">
 
         <fruit-description-component v-if="fruits[activefruit]" :fruit="fruits[activefruit]" :addFruit="addFruit"></fruit-description-component>
 
@@ -164,7 +164,6 @@ export default {
     setTimeout(
       function(){
         vm.receivedFruits = vm.$store.getters.getFruits;
-        console.log('receivedFruits '+JSON.stringify(vm.receivedFruits));
         vm.fruitize();
       },500);
 
