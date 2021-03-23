@@ -23,10 +23,10 @@ export default new Vuex.Store({
 
     actions: {
 
-        async fetchFruits(context) {
+        fetchFruits(context) {
 
             var data =
-                await axios.get('http://localhost:3000/fruit', {
+                axios.get('http://localhost:3000/fruit', {
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -34,6 +34,7 @@ export default new Vuex.Store({
                 .then(response => response.data)
                 .then(fruits => {
                     context.commit('ADD_FRUITS', fruits)
+                    console.log('store' + JSON.stringify(fruits));
                 });
 
             return data;

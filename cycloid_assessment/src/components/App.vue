@@ -14,7 +14,7 @@
 
         <div class="w-4 flex justify-between p-auto m-auto"><span class="w-4 border border-white transform -rotate-12"></span><span class="w-4 border border-white transform rotate-12"></span></div>
 
-        <ul class="h-12 text-left list-none font-sans text-lg overflow-y-scroll overscroll-contain bg-gray-100 rounded-2xl mx-auto">
+        <ul class="h-12 text-left list-none font-sans text-lg overflow-y-scroll overscroll-contain bg-gray-100 rounded-full mx-auto">
 
           <li v-for="(fruit,index) in fruits" :key="index" @click.prevent="activefruit = index; addFruit = false" :class="[ activefruit === index ? 'active' : '' ]">
 
@@ -37,7 +37,7 @@
 
       <div class="w-3/5 mx-auto text-lg">
 
-        <fruit-description-component v-if="fruits[activefruit]" :fruit="fruits[activefruit]" :addFruit="addFruit"></fruit-description-component>
+        <fruit-description-component @fruit-change="reload" v-if="fruits[activefruit]" :fruit="fruits[activefruit]" :addFruit="addFruit"></fruit-description-component>
 
       </div>
 
@@ -74,61 +74,85 @@ export default {
 
   methods:{
 
-    enableAddFruit(){
+    reload: function(){
+
+      this.receivedFruits = [];
+      this.fruits = [];
+
+      this.fetchFruits();
+      
+      var vm = this;
+
+      setTimeout(
+
+        function(){
+
+          vm.receivedFruits = vm.$store.getters.getFruits;
+          vm.fruitize(vm.receivedFruits,vm.fruits);
+
+          console.log(JSON.stringify(vm.fruits));
+
+        },500);
+
+        
+
+    },
+
+    enableAddFruit: function(){
 
       if(this.addFruit == false)
         this.addFruit = true;
 
     },
 
-    fetchFruits(){
+    fetchFruits: function(){
 
       this.$store.dispatch('fetchFruits');
 
     }, 
 
-    fruitize(){
+    fruitize: function(array1,array2){
 
-      for(var i in this.receivedFruits){
+      for(var i in array1){
 
         if(i === 'isFruit'){
-          this.fruits.push(this.receivedFruits);
+          array2.push(array1);
         }
         
-        for(var j in this.receivedFruits[i]){
+        for(var j in array1[i]){
 
           if(j === 'isFruit'){
-            this.fruits.push(this.receivedFruits[i]);
+            array2.push(array1[i]);
           }
           
-          for(var k in this.receivedFruits[i][j]){
+          for(var k in array1[i][j]){
 
             if(k === 'isFruit'){
-              this.fruits.push(this.receivedFruits[i][j]);
+              array2.push(array1[i][j]);
             }
             
-            for(var l in this.receivedFruits[i][j][k]){
+            for(var l in array1[i][j][k]){
 
               if(l === 'isFruit'){
-                this.fruits.push(this.receivedFruits[i][j][k]);
+                array2.push(array1[i][j][k]);
               }
               
-              for(var m in this.receivedFruits[i][j][k][l]){
+              for(var m in array1[i][j][k][l]){
 
                 if(m === 'isFruit'){
-                  this.fruits.push(this.receivedFruits[i][j][k][l]);
+                  array2.push(array1[i][j][k][l]);
                 }
                 
-                for(var n in this.receivedFruits[i][j][k][l][m]){
+                for(var n in array1[i][j][k][l][m]){
 
                   if(n === 'isFruit'){
-                    this.fruits.push(this.receivedFruits[i][j][k][l][m]);
+                    array2.push(array1[i][j][k][l][m]);
                   }
 
-                  for(var o in this.receivedFruits[i][j][k][l][m][n]){
+                  for(var o in array1[i][j][k][l][m][n]){
 
                     if(o === 'isFruit'){
-                      this.fruits.push(this.receivedFruits[i][j][k][l][m][n]);
+                      array2.push(array1[i][j][k][l][m][n]);
                     }
                     
                   }
@@ -148,6 +172,15 @@ export default {
 
   },
 
+  watch:{
+
+    fruits: function(value){
+
+      return value;
+
+    }
+  },
+
   beforeCreate(){
 
     
@@ -157,15 +190,7 @@ export default {
 
     this.activefruit = 0;
     
-    this.fetchFruits();
-
-    var vm = this;
-
-    setTimeout(
-      function(){
-        vm.receivedFruits = vm.$store.getters.getFruits;
-        vm.fruitize();
-      },500);
+    this.reload();
 
   },
 

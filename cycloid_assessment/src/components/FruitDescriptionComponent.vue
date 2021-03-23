@@ -18,26 +18,24 @@
 
       <span class="m-4">{{ c_fruit.description }}</span>
 
-      <button class="bg-black text-white rounded-full">Remove</button>
+      <button @click.prevent="removeFruit(c_fruitId)" class="bg-black text-white rounded-full">Remove</button>
 
     </div>
     
-    <div v-show="c_addFruit" class="flex flex-col">
+    <div v-show="c_addFruit" class="flex flex-col mt-4">
 
       <div class="flex flex-row justify-between">
+      
+        <div id="filer"></div>
+        
+        <div id="file-upload" class="w-1/4 mr-6 cursor-pointer">
 
-        <div id="file-upload" class="w-1/4 mr-6 mt-9 mb-4 cursor-pointer">
+          <div class="mt-1 h-full mb-2">
 
-          <label for="photo" class="block text-sm font-medium text-gray-700">
-          Photo
-          </label>
-
-          <div class="mt-1">
-
-            <div class="w-full flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300
+            <div class="w-full h-52 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300
             border-dashed rounded-md">
 
-              <div class="space-y-1 text-center">
+              <div class="space-y-1 text-center flex flex-col justify-center">
 
                 <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none"
                 viewBox="0 0 48 48" aria-hidden="true">
@@ -59,7 +57,7 @@
                 </div>
 
                 <p class="text-xs text-gray-500">
-                    JPG up to 100MB
+                    JPG up to 10MB
                 </p>
 
               </div>
@@ -70,25 +68,50 @@
 
         </div>
 
-        <form class="mt-14 mb-4 flex flex-row justify-between w-3/4">
+        <form class="mb-4 flex flex-row justify-between w-3/4">
 
           <div class="w-2/5 flex flex-col justify-between">
 
-            <input class="m-2 border border-gray-200" type="text" name="input" placeholder="Name">
+            <input v-model="c_fruitName" class="m-2 border border-gray-200" type="text" name="name" placeholder="Name">
 
-            <input class="m-2 border border-gray-200" type="text" name="input" placeholder="Taste">
+            <input v-model="c_fruitTaste" class="m-2 border border-gray-200" type="text" name="taste" placeholder="Taste">
 
-            <input class="m-2 border border-gray-200" type="text" name="input" placeholder="Price">
+            <input v-model="c_fruitPrice" class="m-2 border border-gray-200" type="text" name="price" placeholder="Price">
+
+            <span class="flex flex-row justify-between m-2">
+
+              <label class="text-gray-500" for="fruitColor">Color</label>
+              <div class="wheel" id="colorWheel" name="fruitColor"></div>
+
+            </span>
+
+            <span class="flex flex-row flex-start">
+
+              <input v-model="c_isFruit" class="m-2 border border-gray-200" type="checkbox" name="isFruit">
+              <label class="text-gray-500 mt-1" for="isFruit">is Fruit</label>
+
+            </span>
+
+            <p v-if="errors.length">
+
+              <ul>
+
+                  <li v-for="(error,index) in errors" :key="index">{{ error }}</li>
+
+              </ul>
+
+            </p>
 
           </div>
 
-          <textarea class="w-1/2 m-2 border border-gray-200" name="description" rows="5" cols="30" maxlength="150" placeholder="Description"></textarea>
+          <textarea v-model="c_fruitDescription" class="w-1/2 m-2 border border-gray-200" name="description" rows="5" cols="30" 
+          maxlength="150" placeholder="Description"></textarea>
 
         </form>
 
       </div>
 
-      <button class="bg-black text-white rounded-full">Add</button>
+      <button class="bg-black text-white rounded-full" @click.prevent="checkForm">Add</button>
 
     </div>
 
@@ -97,8 +120,7 @@
 </template>
 
 <script>
-// Import the Cloudinary class
-import {Cloudinary} from '@cloudinary/base';
+import axios from 'axios';
 
 export default {
   name: 'fruit-description-component',
@@ -111,59 +133,289 @@ export default {
   },
   data(){
     return{
+
       c_fruit: null,
+      c_fruitId: null,
       c_addFruit: false,
-      cloudinary: null
+      c_fruitName: null,
+      c_isFruit: null,
+      c_fruitTaste: null,
+      c_fruitPrice: null,
+      c_fruitColor: null,
+      c_fruitDescription: null,
+      cloudinary: null,
+      colorWheel: null,
+      c_photoUrl: null,
+      c_lastFruitId: null,
+      errors: []
+      
     }
   },
   methods:{
 
+    checkName: function(){
+
+        if (this.c_fruitName){
+
+            if(this.c_fruitName.length > 48){
+
+                this.erros.push('The name is too long.');
+
+                return false;
+
+            }else{
+
+                var regexpName = /[a-zA-Z]/;
+
+                if(!regexpName.test(this.c_fruitName)){
+
+                    this.errors.push('The name must be formed by letters.');
+
+                    return false;
+
+                }else{
+
+                    return true;
+
+                }
+            }
+
+        }else{
+
+            this.errors.push('The name is required.');
+
+            return false;
+
+        }
+
+    },
+
+    checkTaste: function(){
+
+        if (this.c_fruitTaste){
+
+            if(this.c_fruitTaste.length > 48){
+
+                this.erros.push('The taste is too long.');
+
+                return false;
+
+            }else{
+
+                var regexpName = /[a-zA-Z]/;
+
+                if(!regexpName.test(this.c_fruitTaste)){
+
+                    this.errors.push('The taste must be formed by letters.');
+
+                    return false;
+
+                }else{
+
+                    return true;
+
+                }
+            }
+
+        }else{
+
+            this.errors.push('Taste is required.');
+
+            return false;
+
+        }
+
+    },
+
+    checkPrice: function(){
+
+        if (this.c_fruitPrice){
+
+            if(this.c_fruitPrice.length > 48){
+
+                this.erros.push('The price is too long.');
+
+                return false;
+
+            }else{
+
+                var regexpName = /[\d]/;
+
+                if(!regexpName.test(this.c_fruitPrice)){
+
+                    this.errors.push('The price must be formed by numbers, 2 decimals max.');
+
+                    return false;
+
+                }else{
+
+                    return true;
+
+                }
+            }
+
+        }else{
+
+            this.errors.push('The price is required.');
+
+            return false;
+
+        }
+
+    },
+
+    checkDescription: function(){
+
+        if (this.c_fruitDescription){
+
+            if(this.c_fruitDescription.length > 150){
+
+                this.erros.push('The description is too long.');
+
+                return false;
+
+            }else{
+
+              return true;
+
+            }
+
+        }else{
+
+            this.errors.push('The description is required.');
+
+            return false;
+
+        }
+
+    },
+
+
+    checkForm: function (e) {
+
+        this.errors = [];
+
+        if(this.checkName() && this.checkTaste() && this.checkPrice() && this.checkDescription()){
+
+            this.sendFruit();
+
+        }
+
+    },
+
     //function for the cloudinary upload widget (as popup window)
-            cloudinaryUploadWidget: function(){
+    cloudinaryUploadWidget: function(){
 
-                var vm = this;
+      var vm = this;
 
-                //var cloudinary = new Cloudinary();
+      var myWidget = cloudinary.applyUploadWidget(document.getElementById('filer'),
+        {
+          //CLOUDINARY WIDGET UPLOAD API CONFIG
+          cloudName: 'ddcnjjimx',
+          uploadPreset: 'wleo4imq',
+          multiple: false ,
+          sources: ['local', 'camera', 'instagram'],
+          maxImageFileSize: 10000000,
+          minImageWidth: 200,
+          minImageHeight: 200,
+          showPoweredBy: false,
+          filedName: 'file-upload',
+          clientAllowedFormats: "jpeg",
+          showUploadMoreButton: true,
+          cropping: true,
+          showSkipCropButton: true,
+          thumbnailTransformation: [{ width: 200, height: 200, crop: 'limit' }]
 
-                var myWidget = vm.cloudinary.applyUploadWidget(document.getElementById('file-upload'),
-                    {
-                        //CLOUDINARY WIDGET UPLOAD API CONFIG
-                        cloudName: 'ddcnjjimx',
-                        uploadPreset: 'wleo4imq',
-                        multiple: false ,
-                        sources: ['local', 'camera', 'instagram'],
-                        maxImageFileSize: 100000000,
-                        minImageWidth: 200,
-                        minImageHeight: 200,
-                        showPoweredBy: false,
-                        filedName: 'file-upload',
-                        clientAllowedFormats: "jpeg",
-                        showUploadMoreButton: true,
-                        thumbnailTransformation: [{ width: 500, height: 500, crop: 'limit' }]
 
+        },
+        (error, result) => {
+        if (!error && result && result.event === "success") {
 
-                    },
-                    (error, result) => {
-                    if (!error && result && result.event === "success") {
+          vm.c_photoUrl = result.info.secure_url;
 
-                        vm.c_photoUrl = result.info.secure_url;
+          document.getElementById('file-upload').style.display="none";
 
-                            console.log('Done uploading..');
-                        }
+              console.log('Done uploading..');
+        }
 
-                    });
+        if(result.event === "close"){
 
-                    //popup opener
-                    myWidget.open();
+          console.log('closed');
 
-            },
+        }
+
+      });
+
+      //popup opener
+      myWidget.open();
+
+    },
+
+    sendFruit: function(){
+      
+      var vm = this;
+
+      var date = new Date();
+
+      var fruitExpiration = date.setMonth(date.getMonth()+1);
+
+      //alert(fruitExpiration);
+
+      return axios
+      .post('http://localhost:3000/fruit',
+        {
+          "isFruit": vm.c_isFruit,
+          "name": vm.c_fruitName,
+          "image": vm.c_photoUrl,
+          "price": vm.c_fruitPrice,
+          "color": vm.c_fruitColor,
+          "description": vm.c_fruitDescription,
+          "taste": vm.c_fruitTaste,
+          //"expires": fruitExpiration,
+          //"id": vm.c_lastFruitId +1
+          
+        })
+      .then(function(response){
+
+        vm.$emit('fruit-change');
+
+        console.log('responsethis'+JSON.stringify(response));
+
+      })
+      .catch(function(error) {
+
+        vm.$emit('fruit-change');
+
+        console.log("charge ERROR: " + JSON.stringify(error));
+
+      });
+    },
     
-    deleteFruit(id){
+    removeFruit: function(id){
 
-      this.$store.dispatch('deleteFruit',id);
+      var vm = this;
+
+      return axios
+
+      .delete('http://localhost:3000/fruit/'+vm.c_fruitId)
+      .then(function(response){
+
+        vm.$emit('fruit-change');
+
+        console.log('responsethis'+JSON.stringify(response));
+
+      })
+      .catch(function(error) {
+
+        vm.$emit('fruit-change');
+
+        console.log("charge ERROR: " + JSON.stringify(error));
+
+      });
 
     }, 
   },
+
   watch:{
     fruit: function(value){
 
@@ -176,13 +428,18 @@ export default {
 
     }
   },
+
   created(){
 
     this.c_fruit = this.fruit;
     this.c_addFruit = this.addFruit;
-
     this.c_photoUrl = "https://res.cloudinary.com/demo/image/upload/d_avatar.png/non_existing_id.png";
-    this.cloudinary = new Cloudinary();
+
+  },
+
+  updated(){
+
+    this.c_fruitId = this.c_fruit.id;
 
   },
   mounted(){
@@ -193,6 +450,34 @@ export default {
     document.getElementById("file-upload").addEventListener("click", function(){
         vm.cloudinaryUploadWidget();
     }, false);
+
+    vm.colorWheel = iro.ColorPicker("#colorWheel", {
+
+      layout:[
+        {
+          component: iro.ui.Slider,
+
+          options: {
+
+            sliderType: 'hue' 
+            
+          }
+        }
+      ],
+
+      width: 100
+
+    });
+
+    vm.c_fruitColor = vm.colorWheel.color.hexString;
+
+    document.getElementById("colorWheel").addEventListener("click", function(){
+      
+      vm.c_fruitColor = vm.colorWheel.color.hexString;
+
+    });
+
+    this.c_fruitId = this.c_fruit.id;
 
   }
 }

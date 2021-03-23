@@ -28,6 +28,14 @@ export default {
   methods:{
     
   },
+  watch:{
+
+    fruit: function(value){
+
+      this.c_fruit = value;
+      
+    }
+  },
 
   created(){
     this.c_fruit = this.fruit;
