@@ -358,7 +358,7 @@ export default {
 
       var fruitExpiration = date.setMonth(date.getMonth()+1);
 
-      //alert(fruitExpiration);
+      alert(fruitExpiration);
 
       return axios
       .post('http://localhost:3000/fruit',
@@ -369,23 +369,21 @@ export default {
           "price": vm.c_fruitPrice,
           "color": vm.c_fruitColor,
           "description": vm.c_fruitDescription,
-          "taste": vm.c_fruitTaste,
-          //"expires": fruitExpiration,
-          //"id": vm.c_lastFruitId +1
+          "taste": vm.c_fruitTaste
           
         })
       .then(function(response){
 
         vm.$emit('fruit-change');
 
-        //console.log('responsethis'+JSON.stringify(response));
+        console.log('responsethis'+JSON.stringify(response));
 
       })
       .catch(function(error) {
 
         vm.$emit('fruit-change');
 
-        //console.log("charge ERROR: " + JSON.stringify(error));
+        console.log("charge ERROR: " + JSON.stringify(error));
 
       });
     },
@@ -401,14 +399,14 @@ export default {
 
         vm.$emit('fruit-change');
 
-        //console.log('responsethis'+JSON.stringify(response));
+        console.log('responsethis'+JSON.stringify(response));
 
       })
       .catch(function(error) {
 
         vm.$emit('fruit-change');
 
-        //console.log("charge ERROR: " + JSON.stringify(error));
+        console.log("charge ERROR: " + JSON.stringify(error));
 
       });
 
