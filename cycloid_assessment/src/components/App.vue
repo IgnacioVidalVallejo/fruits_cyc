@@ -1,20 +1,20 @@
 <template>
 
-  <div class="w-full bg-gray-100 h-screen pt-16 mx-auto">
+  <div class="w-full bg-gray-100 h-screen mx-auto">
 
-    <header class="fixed top-0 w-full text-center text-2xl bg-gray-100">
+    <header class="w-full mt-0 pt-0 h-20 lg:h-32 text-center text-2xl bg-gray-200">
 
-      <h1 class="w-1/4 h-16 p-0 bg-white rounded-2xl mx-auto text-4xl">Fruit List</h1>
+      <h1 class="w-2/3 h-16 p-0 bg-white rounded-2xl mx-auto text-4xl rounded-t-none leading-relaxed font-medium">Fruit List</h1>
 
     </header>
 
-    <div class="w-2/3 m-auto flex flex-col lg:flex-row justify-between bg-gray-200 rounded-2xl">
+    <div class="w-full lg:w-2/3 m-auto flex flex-col lg:flex-row justify-between bg-gray-200 rounded-2xl rounded-t-none mx-auto">
 
-      <div class="w-1/4 h-20 mt-4 flex flex-col">
+      <div class="w-1/4 h-20 mt-4 flex flex-col mx-auto">
 
         <div class="w-4 flex justify-between p-auto m-auto"><span class="w-4 border border-white transform -rotate-12"></span><span class="w-4 border border-white transform rotate-12"></span></div>
 
-        <ul class="h-12 text-left list-none font-sans text-lg overflow-y-scroll overscroll-contain bg-gray-100 rounded-full mx-auto">
+        <ul class="h-12 w-36 text-left list-none font-sans text-lg overflow-y-scroll overscroll-contain bg-gray-100 rounded-full mx-auto">
 
           <li v-for="(fruit,index) in fruits" :key="index" @click.prevent="activefruit = index; addFruit = false" :class="[ activefruit === index ? 'active' : '' ]">
 
@@ -24,7 +24,7 @@
 
           <li class="text-center">
 
-            <button class="w-full rounded-full h-12 text-center bg-black text-white" @click="enableAddFruit">Add fruit</button>
+            <button class="w-full rounded-full h-12 text-center bg-gray-400 text-white px-4 font-normal hover:font-black" @click="enableAddFruit">Add fruit</button>
             
           </li>
     
@@ -35,7 +35,7 @@
       </div>
       
 
-      <div class="w-3/5 mx-auto text-lg">
+      <div class="w-4/5 lg:w-3/5 mx-auto text-lg">
 
         <fruit-description-component @fruit-change="reload" v-if="fruits[activefruit]" :fruit="fruits[activefruit]" :addFruit="addFruit"></fruit-description-component>
 
@@ -67,7 +67,8 @@ export default {
       receivedFruits: [],
       fruits:[],
       activefruit: null,
-      addFruit: false
+      addFruit: false,
+      throwFruit: null
 
     }
   },
@@ -90,12 +91,12 @@ export default {
           vm.receivedFruits = vm.$store.getters.getFruits;
           vm.fruitize(vm.receivedFruits,vm.fruits);
 
-          console.log(JSON.stringify(vm.fruits));
+          //console.log(JSON.stringify(vm.fruits));
 
         },500);
 
+        this.activeFruit = 0;
         
-
     },
 
     enableAddFruit: function(){
@@ -195,8 +196,6 @@ export default {
   },
 
   mounted(){
-
-    
 
   }
 }

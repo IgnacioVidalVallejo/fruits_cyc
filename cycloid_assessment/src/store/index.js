@@ -34,7 +34,7 @@ export default new Vuex.Store({
                 .then(response => response.data)
                 .then(fruits => {
                     context.commit('ADD_FRUITS', fruits)
-                    console.log('store' + JSON.stringify(fruits));
+                        //console.log('store' + JSON.stringify(fruits));
                 });
 
             return data;

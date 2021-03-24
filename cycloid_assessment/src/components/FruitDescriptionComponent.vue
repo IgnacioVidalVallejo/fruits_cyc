@@ -18,7 +18,7 @@
 
       <span class="m-4">{{ c_fruit.description }}</span>
 
-      <button @click.prevent="removeFruit(c_fruitId)" class="bg-black text-white rounded-full">Remove</button>
+      <button @click.prevent="removeFruit(c_fruitId)" class="bg-gray-400 text-white rounded-full p-4 font-normal hover:font-black">Remove</button>
 
     </div>
     
@@ -72,11 +72,11 @@
 
           <div class="w-2/5 flex flex-col justify-between">
 
-            <input v-model="c_fruitName" class="m-2 border border-gray-200" type="text" name="name" placeholder="Name">
+            <input v-model="c_fruitName" class="m-2 border border-gray-200 focus:ring-2 focus:ring-gray-300" type="text" name="name" placeholder="Name">
 
-            <input v-model="c_fruitTaste" class="m-2 border border-gray-200" type="text" name="taste" placeholder="Taste">
+            <input v-model="c_fruitTaste" class="m-2 border border-gray-200 focus:ring-2 focus:ring-gray-300" type="text" name="taste" placeholder="Taste">
 
-            <input v-model="c_fruitPrice" class="m-2 border border-gray-200" type="text" name="price" placeholder="Price">
+            <input v-model="c_fruitPrice" class="m-2 border border-gray-200 focus:ring-2 focus:ring-gray-300" type="text" name="price" placeholder="Price">
 
             <span class="flex flex-row justify-between m-2">
 
@@ -87,7 +87,7 @@
 
             <span class="flex flex-row flex-start">
 
-              <input v-model="c_isFruit" class="m-2 border border-gray-200" type="checkbox" name="isFruit">
+              <input v-model="c_isFruit" class="m-2 border border-gray-200 focus:ring-2 focus:ring-gray-300" type="checkbox" name="isFruit">
               <label class="text-gray-500 mt-1" for="isFruit">is Fruit</label>
 
             </span>
@@ -104,14 +104,14 @@
 
           </div>
 
-          <textarea v-model="c_fruitDescription" class="w-1/2 m-2 border border-gray-200" name="description" rows="5" cols="30" 
+          <textarea v-model="c_fruitDescription" class="w-1/2 m-2 border border-gray-200 focus:ring-2 focus:ring-gray-300" name="description" rows="5" cols="30" 
           maxlength="150" placeholder="Description"></textarea>
 
         </form>
 
       </div>
 
-      <button class="bg-black text-white rounded-full" @click.prevent="checkForm">Add</button>
+      <button class="bg-gray-400 text-white rounded-full p-4 font-normal hover:font-black" @click.prevent="checkForm">Add fruit</button>
 
     </div>
 
@@ -316,15 +316,14 @@ export default {
           multiple: false ,
           sources: ['local', 'camera', 'instagram'],
           maxImageFileSize: 10000000,
-          minImageWidth: 200,
-          minImageHeight: 200,
+          minImageWidth: 100,
+          minImageHeight: 100,
           showPoweredBy: false,
           filedName: 'file-upload',
           clientAllowedFormats: "jpeg",
           showUploadMoreButton: true,
-          cropping: true,
           showSkipCropButton: true,
-          thumbnailTransformation: [{ width: 200, height: 200, crop: 'limit' }]
+          thumbnailTransformation: [{ width: 150, height: 150, crop: 'limit' }]
 
 
         },
@@ -379,14 +378,14 @@ export default {
 
         vm.$emit('fruit-change');
 
-        console.log('responsethis'+JSON.stringify(response));
+        //console.log('responsethis'+JSON.stringify(response));
 
       })
       .catch(function(error) {
 
         vm.$emit('fruit-change');
 
-        console.log("charge ERROR: " + JSON.stringify(error));
+        //console.log("charge ERROR: " + JSON.stringify(error));
 
       });
     },
@@ -402,14 +401,14 @@ export default {
 
         vm.$emit('fruit-change');
 
-        console.log('responsethis'+JSON.stringify(response));
+        //console.log('responsethis'+JSON.stringify(response));
 
       })
       .catch(function(error) {
 
         vm.$emit('fruit-change');
 
-        console.log("charge ERROR: " + JSON.stringify(error));
+        //console.log("charge ERROR: " + JSON.stringify(error));
 
       });
 
