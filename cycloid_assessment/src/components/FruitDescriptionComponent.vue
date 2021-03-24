@@ -2,6 +2,7 @@
 
   <div class="m-4 p-6 pt-2 bg-white rounded-2xl text-center ">
 
+    <!--info show box-->
     <div v-if="!c_addFruit" class="flex flex-col">
 
       <div v-if="c_fruit.name" class="flex mx-4 ml-1 justify-between">
@@ -22,10 +23,12 @@
 
     </div>
     
+    <!--add fruit info box-->
     <div v-show="c_addFruit" class="flex flex-col mt-4">
 
       <div class="flex flex-row justify-between">
       
+        <!--div where to apply cloudinary widget-->
         <div id="filer"></div>
         
         <div id="file-upload" class="w-1/4 mr-6 cursor-pointer">
@@ -448,6 +451,7 @@ export default {
         vm.cloudinaryUploadWidget();
     }, false);
 
+    //color slider
     vm.colorWheel = iro.ColorPicker("#colorWheel", {
 
       layout:[
